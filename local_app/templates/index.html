@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<title>World Happiness Visualization App</title>
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='shared/ISchool_150PXPFP.png')}}">
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+</head>
+<body>
+	<header>
+        <img src="{{ url_for('static', filename='shared/cropped_header.png') }}" alt="Header" style="max-width: 100%;">
+    </header>
+
+	<div id="Top-of-Page" class="navbar">
+		<a href="#World Happiness over time">World Happiness over time</a>
+		<a href="#World Happiness by region">World Happiness by region</a>
+	</div>
+
+	<div class="container">
+
+		<section>
+			<h2>World Happiness Visualization Dashboard</h2>
+			<p>This project utilizes World Happiness data from Kaggle. Analysis for the world happiness characteristics are performed and responsive visual outputs are displayed below. Built using Python, Javascript, CSS, Flask, and hosted using AWS.</p>
+		</section>
+
+
+		<section id="World Happiness over time" class="section">
+			<h2>World Happiness over time</h2>
+		</section>
+
+		<section id="World Happiness over time" class="section">
+			<p><b>Displayed below is a visual breakdown of World Happiness over time, mean and median Data last pulled {{date_format}}<b></p>
+            <div id='graphJSON_mean_happiness' class='chart'></div>
+            <div id='graphJSON_median_happiness' class='chart'></div>	
+			<br>
+			<br>
+			<br>
+			<br>
+
+						
+
+		</section>
+
+		<section id="World Happiness by region" class="section">
+			<h2>World Happiness by region</h2>
+		</section>
+
+<!-- 		<section id="World Happiness by region" class="section">
+
+            <p>Displayed below is a visual representation World Happiness by region. Data last pulled {{date_format}}</p>
+            <div id='graphJSON_loan_tiers' class='chart'></div>   
+
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>	
+
+		</section> -->
+
+		<section id="Bottom-of-Page" class="section">
+			<a href="#Top-of-Page">Back to Top</a>
+		</section>
+
+		<footer class="footer">
+            <p>&copy; <span id="currentYear"></span> James Qiu, 2025. All Rights Reserved.</p>
+        </footer>
+
+	</div>
+</body>
+
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/script_all.js') }}"></script>
+
+<script type='text/javascript'>
+		$(document).ready(function() {
+			$('table.display').DataTable({
+	   			'order': [[0, 'desc']]
+			});
+		});
+
+	var graphs = {{graphJSON_mean_happiness | safe}};
+	Plotly.plot('graphJSON_mean_happiness',graphs,{});
+	function resizePlot_1() {
+		var plot = document.getElementById('graphJSON_mean_happiness');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}
+
+	var graphs = {{graphJSON_median_happiness | safe}};
+	Plotly.plot('graphJSON_median_happiness',graphs,{});
+	function resizePlot_2() {
+		var plot = document.getElementById('graphJSON_median_happiness');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}
+	
+	// Event listener for window resize
+	window.addEventListener('resize', function() {
+		resizePlot_1();	
+		resizePlot_2();						
+	});
+
+	// Initial resizing of the plot on page load
+	window.addEventListener('load', function() {
+		resizePlot_1();
+		resizePlot_2();			
+	});
+
+</script>
+
+</html>
