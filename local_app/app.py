@@ -8,6 +8,8 @@ import numpy as np
 from io import StringIO
 import plotly
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 try:
 	from passwords import *
@@ -253,7 +255,110 @@ def show_home_page():
 	)	
 
 	# make json
-	graphJSON_freedom_v_target = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)	
+	graphJSON_freedom_v_target = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+	#----------------------------------------------------------------------------------
+	# lebanon
+	# subset Lebanon sort by year
+	lebanon_df = df[df['country'] == 'lebanon'].sort_values('year')
+
+	# variables
+	timeseries_variables = [
+	    'happiness_score_new',
+	    'gdp_per_capita',
+	    'social_support',
+	    'healthy_life_expectancy',
+	    'freedom_to_make_life_choices',
+	    'generosity',
+	    'perceptions_of_corruption'
+	]
+
+	# 3 rows x 3 cols
+	fig = make_subplots(
+	    rows=3, cols=3,
+	    subplot_titles=[f'{col} over Time' for col in timeseries_variables]
+	)
+
+	# loop through variables and add traces
+	for i, col in enumerate(timeseries_variables):
+	    row = i // 3 + 1
+	    col_pos = i % 3 + 1
+	    fig.add_trace(
+	        go.Scatter(
+	            x=lebanon_df['year'],
+	            y=lebanon_df[col],
+	            mode='lines+markers',
+	            line=dict(color='purple'),
+	            name=col
+	        ),
+	        row=row,
+	        col=col_pos
+	    )
+
+	# remove empty subplot (bottom-right) if less than 9 variables
+	fig.update_layout(height=900, width=1200, showlegend=False)
+
+	# x and y axes labels
+	for i in range(1, len(timeseries_variables)+1):
+	    fig['layout'][f'xaxis{i}'].title.text = 'Year'
+	    fig['layout'][f'yaxis{i}'].title.text = timeseries_variables[i-1]
+
+	# make json
+	graphJSON_lebanon = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)	  
+
+
+	#----------------------------------------------------------------------------------
+	# ivory coast
+	# subset ivory sort by year
+	ivory_df = df[df['country'] == 'ivory_coast'].sort_values('year')
+
+	# Variables to plot
+	timeseries_variables = [
+	    'happiness_score_new',
+	    'gdp_per_capita',
+	    'social_support',
+	    'healthy_life_expectancy',
+	    'freedom_to_make_life_choices',
+	    'generosity',
+	    'perceptions_of_corruption'
+	]
+
+	# 3 rows x 3 cols
+	fig = make_subplots(
+	    rows=3, cols=3,
+	    subplot_titles=[f'{col} over Time' for col in timeseries_variables]
+	)
+
+	# loop through variables and add traces
+	for i, col in enumerate(timeseries_variables):
+	    row = i // 3 + 1
+	    col_pos = i % 3 + 1
+	    fig.add_trace(
+	        go.Scatter(
+	            x=ivory_df['year'],
+	            y=ivory_df[col],
+	            mode='lines+markers',
+	            line=dict(color='purple'),
+	            name=col
+	        ),
+	        row=row,
+	        col=col_pos
+	    )
+
+	# layout
+	fig.update_layout(
+	    height=900,
+	    width=1200,
+	    showlegend=False
+	)
+
+	# x and y axes labels
+	for i in range(1, len(timeseries_variables)+1):
+	    fig['layout'][f'xaxis{i}'].title.text = 'Year'
+	    fig['layout'][f'yaxis{i}'].title.text = timeseries_variables[i-1] 
+
+	# make json
+	graphJSON_ivory = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)	 	    
 	#################################################################################
 	# SHOW HOME PAGE
 	#################################################################################
@@ -271,7 +376,8 @@ def show_home_page():
 		graphJSON_social_v_target=graphJSON_social_v_target,
 		graphJSON_freedom_v_target=graphJSON_freedom_v_target,
 		graphJSON_life_v_target=graphJSON_life_v_target,
-
+		graphJSON_lebanon=graphJSON_lebanon,
+		graphJSON_ivory=graphJSON_ivory,
 	)
 
 # run app		

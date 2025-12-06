@@ -20,7 +20,9 @@
 	<div id="Top-of-Page" class="navbar">
 		<a href="#World Happiness over time">World Happiness over time</a>
 		<a href="#World Happiness by region">World Happiness by region</a>
-		<a href="#Correlation Matrix for Features">Correlation Matrix for Features</a>		
+		<a href="#Correlation Matrix for Features">Correlation Matrix for Features</a>
+		<a href="#Largest Drop in Happiness">Largest Drop in Happiness</a>
+		<a href="#Largest Increase in Happiness">Largest Increase in Happiness</a>							
 	</div>
 
 	<div class="container">
@@ -123,6 +125,39 @@
 			<br>
 			<br>				
 		</section>			
+
+		<section id="Largest Drop in Happiness" class="section">
+			<h2>Largest Drop in Happiness</h2>
+		</section>
+
+		<section id="Largest Drop in Happiness" class="section">
+			<p> Lebanon experienced the largest drop in happiness between it's two extreme points over the time period in this data. Let's investigate what variables might correlate with that drop and use outside resources to help explain the shift. Data last pulled {{date_format}}</p>
+			<ul>
+				<li>It seems like happiness dropped the most starting in 2021, which correlates well with social support, and freedom.</li>
+				<li>Contextually, this makes sense because during 2021 Lebanon was in an economic crisis that led to mass protests, government oppression, and violent confrontations.</li>
+			</ul>
+            <div id='graphJSON_lebanon' class='chart'></div>
+			<br>
+			<br>
+			<br>
+			<br>
+		</section>
+
+		<section id="Largest Increase in Happiness" class="section">
+			<h2>Largest Increase in Happiness</h2>
+		</section>
+
+		<section id="Largest Increase in Happiness" class="section">
+			<p> Ivory Coast experienced the largest increase in happiness between it's two extreme points over the time period in this data. Let's investigate what variables might correlate with that increase and use outside resources to help explain the shift. Data last pulled {{date_format}}</p>
+			<ul>
+				<li>The increase in happiness appears to be most correlated with the dramatic increase in life expectancy. This corresponds with civil wars ending, the country dramatically scaling up programs designed to combat various diseases (Malaria, HIV/AIDS, etc) and starting a campaign to provide free healthcare to its population.</li>
+			</ul>
+            <div id='graphJSON_ivory' class='chart'></div>
+			<br>
+			<br>
+			<br>
+			<br>
+		</section>		
 
 		<section id="Bottom-of-Page" class="section">
 			<a href="#Top-of-Page">Back to Top</a>
@@ -271,6 +306,35 @@
 			height: height
 		});
 	}	
+
+	var graphs = {{graphJSON_lebanon | safe}};
+	Plotly.plot('graphJSON_lebanon',graphs,{});
+	function resizePlot_10() {
+		var plot = document.getElementById('graphJSON_lebanon');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}	
+
+	var graphs = {{graphJSON_ivory | safe}};
+	Plotly.plot('graphJSON_ivory',graphs,{});
+	function resizePlot_11() {
+		var plot = document.getElementById('graphJSON_ivory');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}	
+
 	// Event listener for window resize
 	window.addEventListener('resize', function() {
 		resizePlot_1();	
@@ -281,7 +345,9 @@
 		resizePlot_6();
 		resizePlot_7();
 		resizePlot_8();
-		resizePlot_9();																		
+		resizePlot_9();
+		resizePlot_10();
+		resizePlot_11();																							
 	});
 
 	// Initial resizing of the plot on page load
@@ -294,7 +360,9 @@
 		resizePlot_6();
 		resizePlot_7();
 		resizePlot_8();
-		resizePlot_9();													
+		resizePlot_9();
+		resizePlot_10();
+		resizePlot_11();																
 	});
 
 </script>
