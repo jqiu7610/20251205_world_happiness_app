@@ -20,6 +20,7 @@
 	<div id="Top-of-Page" class="navbar">
 		<a href="#World Happiness over time">World Happiness over time</a>
 		<a href="#World Happiness by region">World Happiness by region</a>
+		<a href="#Correlation Matrix for Features">Correlation Matrix for Features</a>		
 	</div>
 
 	<div class="container">
@@ -35,34 +36,93 @@
 		</section>
 
 		<section id="World Happiness over time" class="section">
-			<p><b>Displayed below is a visual breakdown of World Happiness over time, mean and median Data last pulled {{date_format}}<b></p>
+			<p>Displayed below is a visual breakdown of World Happiness over time, mean and median. Data last pulled {{date_format}}</p>
+			<ul>
+				<li>We want to examine this to see what the mean/median happiness trends over time look like, globally.</li>
+				<li>We look at median as well just to account for potential outliers represented via mean.</li>
+			</ul>
             <div id='graphJSON_mean_happiness' class='chart'></div>
             <div id='graphJSON_median_happiness' class='chart'></div>	
 			<br>
 			<br>
 			<br>
 			<br>
-
-						
-
 		</section>
 
 		<section id="World Happiness by region" class="section">
 			<h2>World Happiness by region</h2>
 		</section>
 
-<!-- 		<section id="World Happiness by region" class="section">
+		<section id="World Happiness by region" class="section">
 
             <p>Displayed below is a visual representation World Happiness by region. Data last pulled {{date_format}}</p>
-            <div id='graphJSON_loan_tiers' class='chart'></div>   
+			<ul>
+				<li>This is to determine what the mean/median happiness looks like over time by region.</li>
+				<li>We can identify trends specific to regions, and make it comparable to other regions.</li>
+				<li>Leverage plotly for interactivity, able to pick and choose regions to display.</li>
+			</ul>
+            <div id='graphJSON_mean_region' class='chart'></div>
+            <div id='graphJSON_median_region' class='chart'></div>               
+			<br>
+			<br>
+			<br>
+			<br>
+		</section>
 
-			<br>
-			<br>
-			<br>
-			<br>
-			<br>	
+		<section id="Correlation Matrix for Features" class="section">
+			<h2>Correlation Matrix for Features</h2>
+		</section>
 
-		</section> -->
+		<section id="Correlation Matrix for Features" class="section">
+
+            <p>Displayed below is a correlation matrix for features and happiness score. Data last pulled {{date_format}}</p>
+			<ul>
+				<li>This is to determine how the features correlate with our target 'Happiness'.</li>
+				<li>We can see that social support, life expectancy, GDP per capita, and freedom to make life choices tend to have the highest correlation with our target - Happiness Score</li>
+			</ul>
+            <div id='graphJSON_corr' class='chart'></div>            
+			<br>
+			<br>
+			<br>
+			<br>			
+            <p>Visualizing relationship b/t happiness and GDP per capita. Data last pulled {{date_format}}</p>
+			<ul>
+				<li>Overall, we see a positive correlation here.</li>
+				<li>We notice data issue here, which we will discuss in section 4 - Assumptions and Limitations</li>
+			</ul>
+            <div id='graphJSON_gdp_v_target' class='chart'></div>  			
+			<br>
+			<br>
+			<br>
+			<br>			
+            <p>Visualizing relationship b/t happiness and social support. Data last pulled {{date_format}}</p>
+			<ul>
+				<li>Overall, we see a positive correlation here.</li>
+			</ul>
+            <div id='graphJSON_social_v_target' class='chart'></div>  			
+			<br>
+			<br>
+			<br>
+			<br>
+            <p>Visualizing relationship b/t happiness and life expectancy. Data last pulled {{date_format}}</p>
+			<ul>
+				<li>Overall, we see a positive correlation here.</li>
+			</ul>
+            <div id='graphJSON_life_v_target' class='chart'></div>  			
+			<br>
+			<br>
+			<br>
+			<br>
+            <p>Visualizing relationship b/t happiness and freedom. Data last pulled {{date_format}}</p>
+			<ul>
+				<li>Overall, we see a positive correlation here.</li>
+			</ul>
+            <div id='graphJSON_freedom_v_target' class='chart'></div>  			
+			<br>
+			<br>
+			<br>
+			<br>				
+		</section>			
 
 		<section id="Bottom-of-Page" class="section">
 			<a href="#Top-of-Page">Back to Top</a>
@@ -113,17 +173,128 @@
 			height: height
 		});
 	}
-	
+
+	var graphs = {{graphJSON_mean_region | safe}};
+	Plotly.plot('graphJSON_mean_region',graphs,{});
+	function resizePlot_3() {
+		var plot = document.getElementById('graphJSON_mean_region');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}	
+
+	var graphs = {{graphJSON_median_region | safe}};
+	Plotly.plot('graphJSON_median_region',graphs,{});
+	function resizePlot_4() {
+		var plot = document.getElementById('graphJSON_median_region');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}
+
+	var graphs = {{graphJSON_corr | safe}};
+	Plotly.plot('graphJSON_corr',graphs,{});
+	function resizePlot_5() {
+		var plot = document.getElementById('graphJSON_corr');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}		
+
+	var graphs = {{graphJSON_gdp_v_target | safe}};
+	Plotly.plot('graphJSON_gdp_v_target',graphs,{});
+	function resizePlot_6() {
+		var plot = document.getElementById('graphJSON_gdp_v_target');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}
+
+	var graphs = {{graphJSON_social_v_target | safe}};
+	Plotly.plot('graphJSON_social_v_target',graphs,{});
+	function resizePlot_7() {
+		var plot = document.getElementById('graphJSON_social_v_target');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}	
+
+	var graphs = {{graphJSON_life_v_target | safe}};
+	Plotly.plot('graphJSON_life_v_target',graphs,{});
+	function resizePlot_8() {
+		var plot = document.getElementById('graphJSON_life_v_target');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}				
+
+	var graphs = {{graphJSON_freedom_v_target | safe}};
+	Plotly.plot('graphJSON_freedom_v_target',graphs,{});
+	function resizePlot_9() {
+		var plot = document.getElementById('graphJSON_freedom_v_target');
+		var width = plot.offsetWidth;
+		var height = plot.offsetHeight;
+
+		// Update the plot layout based on the new width and height
+		Plotly.relayout(plot, {
+			width: width,
+			height: height
+		});
+	}	
 	// Event listener for window resize
 	window.addEventListener('resize', function() {
 		resizePlot_1();	
-		resizePlot_2();						
+		resizePlot_2();
+		resizePlot_3();
+		resizePlot_4();
+		resizePlot_5();
+		resizePlot_6();
+		resizePlot_7();
+		resizePlot_8();
+		resizePlot_9();																		
 	});
 
 	// Initial resizing of the plot on page load
 	window.addEventListener('load', function() {
 		resizePlot_1();
-		resizePlot_2();			
+		resizePlot_2();
+		resizePlot_3();
+		resizePlot_4();
+		resizePlot_5();
+		resizePlot_6();
+		resizePlot_7();
+		resizePlot_8();
+		resizePlot_9();													
 	});
 
 </script>

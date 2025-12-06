@@ -88,11 +88,172 @@ def show_home_page():
 	fig.update_xaxes(showgrid=False)
 	fig.update_yaxes(showgrid=False)
 
-	# show
-	fig.show()
 	# make json
 	graphJSON_median_happiness = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
+	# create plot of regional happiness
+	#----------------------------------------------------------------------------------
+	# mean
+	df_grouped = df.groupby(by=['regional_indicator', 'year']).agg({'happiness_score_new':'mean'}).sort_values(by='year', ascending=True).reset_index()
+
+	# plot
+	fig = px.line(
+	    df_grouped,
+	    x='year',
+	    y='happiness_score_new',
+	    color='regional_indicator',
+	    title='Mean Happiness Scores Over Time by Region',
+	    width=1000,
+	    height=500 
+	)
+
+	# remove grid
+	fig.update_xaxes(showgrid=False)
+	fig.update_yaxes(showgrid=False)
+
+	# make json
+	graphJSON_mean_region = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+	#----------------------------------------------------------------------------------
+	# median
+	df_grouped = df.groupby(by=['regional_indicator', 'year']).agg({'happiness_score_new':'median'}).sort_values(by='year', ascending=True).reset_index()
+
+	# plot
+	fig = px.line(
+	    df_grouped,
+	    x='year',
+	    y='happiness_score_new',
+	    color='regional_indicator',
+	    title='Median Happiness Scores Over Time by Region',
+	    width=1000,
+	    height=500 
+	)
+
+	# remove grid
+	fig.update_xaxes(showgrid=False)
+	fig.update_yaxes(showgrid=False)
+
+	# make json
+	graphJSON_median_region = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+	#----------------------------------------------------------------------------------
+	# correlation matrix
+	# select numeric columns related to happiness
+	numeric_cols = [
+	    'happiness_score_new',
+	    'gdp_per_capita',
+	    'social_support',
+	    'healthy_life_expectancy',
+	    'freedom_to_make_life_choices',
+	    'generosity',
+	    'perceptions_of_corruption'
+	]
+
+	# compute correlation matrix
+	corr = df[numeric_cols].corr()
+
+	# plotly heatmap
+	fig = px.imshow(
+	    corr,
+	    text_auto=True,
+	    color_continuous_scale='RdBu_r',
+	    zmin=-1,
+	    zmax=1,
+	    aspect='auto'
+	)
+
+	fig.update_layout(
+	    title='Correlation Matrix of Happiness and Key Socioeconomic Variables',
+	    width=900,
+	    height=600
+	)
+
+	# make json
+	graphJSON_corr = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+	#----------------------------------------------------------------------------------
+	# GDP vs happiness
+	fig = px.scatter(
+	    df,
+	    x='gdp_per_capita',
+	    y='happiness_score_new',
+	    opacity=0.4,
+	    title='GDP per capita vs Happiness (Global)',
+	)
+
+	fig.update_layout(
+	    xaxis_title='GDP per capita',
+	    yaxis_title='Happiness Score',
+	)
+
+	fig.update_xaxes(showgrid=True, gridwidth=0.5)
+	fig.update_yaxes(showgrid=True, gridwidth=0.5)
+
+	# make json
+	graphJSON_gdp_v_target = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+	#----------------------------------------------------------------------------------
+	# social vs happiness	
+	fig = px.scatter(
+	    df,
+	    x='social_support',
+	    y='happiness_score_new',
+	    opacity=0.4,
+	    title='Social Support vs Happiness (Global)',
+	)
+
+	fig.update_layout(
+	    xaxis_title='Social Support',
+	    yaxis_title='Happiness Score',
+	)
+
+	fig.update_xaxes(showgrid=True, gridwidth=0.5)
+	fig.update_yaxes(showgrid=True, gridwidth=0.5)
+
+	# make json
+	graphJSON_social_v_target = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+	#----------------------------------------------------------------------------------
+	# life vs happiness	
+	fig = px.scatter(
+	    df,
+	    x='healthy_life_expectancy',
+	    y='happiness_score_new',
+	    opacity=0.4,
+	    title='Healthy Life Expectancy vs Happiness (Global)'
+	)
+
+	fig.update_layout(
+	    xaxis_title='Healthy Life Expectancy',
+	    yaxis_title='Happiness Score'
+	)
+
+	fig.update_xaxes(showgrid=True, gridwidth=0.5)
+	fig.update_yaxes(showgrid=True, gridwidth=0.5)
+
+
+	# make json
+	graphJSON_life_v_target = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+	#----------------------------------------------------------------------------------
+	# freedom vs happiness
+	fig = px.scatter(
+	    df,
+	    x='freedom_to_make_life_choices',
+	    y='happiness_score_new',
+	    opacity=0.4,
+	    title='Freedom vs Happiness (Global)',
+	)
+
+	fig.update_layout(
+	    xaxis_title='Freedom',
+	    yaxis_title='Happiness Score',
+	    xaxis=dict(showgrid=True, gridwidth=0.5),
+	    yaxis=dict(showgrid=True, gridwidth=0.5),
+	)	
+
+	# make json
+	graphJSON_freedom_v_target = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)	
 	#################################################################################
 	# SHOW HOME PAGE
 	#################################################################################
@@ -103,6 +264,13 @@ def show_home_page():
 		# df_happiness_cleaned=df_happiness_cleaned,
 		graphJSON_mean_happiness=graphJSON_mean_happiness,
 		graphJSON_median_happiness=graphJSON_median_happiness,
+		graphJSON_mean_region=graphJSON_mean_region,
+		graphJSON_median_region=graphJSON_median_region,
+		graphJSON_corr=graphJSON_corr,
+		graphJSON_gdp_v_target=graphJSON_gdp_v_target,
+		graphJSON_social_v_target=graphJSON_social_v_target,
+		graphJSON_freedom_v_target=graphJSON_freedom_v_target,
+		graphJSON_life_v_target=graphJSON_life_v_target,
 
 	)
 
